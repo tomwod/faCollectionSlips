@@ -13,14 +13,14 @@ make sure you have pdftohtml (http://www.foolabs.com/xpdf/download.html) install
 linux binaries available
 
 on ubuntu you can get it like this
-...
+```
 apt-get install poppler-utils
-...
+```
 
 then download the customer collection summary pdf from your food assembly.  if you're here you know how to do that.
-...
-./makeCollectionSlips.sh pdfFile.pdf
-...
+```
+./makeCollectionSlips.sh thatPdfFile.pdf
+```
 
 this will result (hopefully) in an html file with the same name as the pdf.  load this in chrome, check, then print
 
