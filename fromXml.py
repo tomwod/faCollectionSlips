@@ -163,22 +163,15 @@ for x in sorted(allinfo.keys(),key=natural_sort_key):
     table+= '<table cellpadding=0 width=85% style="border:4px solid black;">'
     table+= "<tr>"
 
-    # ['member'][2] is in MOST cases the full name, but sometimes a long/double barrelled  first 
-    #   name might put that out
-    nameData = allinfo[x]['member']
-    name = allinfo[x]['member'][2]
-    
-    # for a better attempt at name, the full name is all the memberdata elements between the 
-    # order count (ie "6th order") and the phone number.  this convoluted hackery gets the full name
-    start = end = 0
-    for n, e in enumerate(nameData):
-        if "order" in e:
-            # from here..
-            start = n+1
-        if e.replace(" ", "").isdigit():
-            # to here (this must be the phone number...)
-            name = " ".join(nameData[start:n])
+    # name is everything after the first "-" in ['member'][0] (the may be double barrelled names..)
+    # + all the values up until the order count field (because names can get split over a few lines..)
+    namebits = allinfo[x]['member'][0].split("-")[1:]
+    for token in allinfo[x]['member'][1:]:
+        if "order" in token:
             break
+        namebits.append(token)
+    name = " ".join(namebits)
+
     name = name.title()
 
     table+= '<td border=0 colspan=3><p style="background: linear-gradient(to right, #AAAAAA, white); font-size:14; font-family:verdana;"><b>%s - %s</bv></p></td><td valign="top" rowspan=10 width=105><img height="115" width="100" src=logo.png></td>' % (x.split("-")[0], name)
@@ -195,6 +188,7 @@ for x in sorted(allinfo.keys(),key=natural_sort_key):
     table+= '<tr><td colspan=3> </td></tr>'
     table+= "</table>"
     tables.append(table)
+
 # put the orders in order of length - i think thats more paper efficient.
 tables.sort(key=lambda x:len(x))
 tpp=2
