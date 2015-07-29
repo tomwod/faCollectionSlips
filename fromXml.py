@@ -63,9 +63,10 @@ leftalign_producer = None
 leftalign_product = None
 leftalign_productcount = None
 
+
 for i, x in enumerate(parseLines(open(xmlfile))):
     leftAlign, data = x
-    
+
     # orderNumber - name
     if re.match("[0-9]+ [-]", data):
         # this usually means the end of the previous order - so store it (it's not if this is the
@@ -144,6 +145,16 @@ for i, x in enumerate(parseLines(open(xmlfile))):
         # one product may take more than one line so this will keep adding while we're in the
         # same column (same alignment)
         productdata.append(data)
+
+# last line..
+if productdata:
+
+    # productCount is the PREVIOUS count (not the current line - that's for the next product)
+    orderData[producer].append((productCount, " ".join(productdata)))
+
+    # empty the productdata list ready for the next product
+    productdata = []
+
 
 # add the last order to the dict
 if orderId:
